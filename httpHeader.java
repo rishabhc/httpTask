@@ -3,11 +3,13 @@ import java.io.*;
 
 public class httpHeader {
     
-	public static void getHeader(String url) throws IOException {
-		Socket s = new Socket(url,80);
+    public static void getHeader(String url) throws IOException {
+		URL stringUrl = new URL(url);
+        Socket s = new Socket(stringUrl.getHost(),80);
 		BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		PrintStream ps = new PrintStream(s.getOutputStream());
-		ps.println("GET / HTTP/1.1");
+		ps.println("HEAD / HTTP/1.1");
+        ps.println("Host: " + stringUrl.getHost());
 		ps.println();
 		String str = "";
 		while(str!=null) {
@@ -17,7 +19,7 @@ public class httpHeader {
 	}
 	public static void main(String[] args) {
 		try {
-            getHeader("www.google.com");
+            if(args[0]!="") getHeader(args[0]);
 		}
         catch(IOException e) {}
 	}
